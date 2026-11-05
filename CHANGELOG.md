@@ -7,6 +7,7 @@ All notable changes to NotchKit. The format follows [Keep a Changelog](https://k
 ### Added
 - A standalone SwiftPM package (`NotchKit` library, `NotchKitTests`), extracted from Hiccup with the history of its NotchKit sources and tests.
 - `Examples/NotchKitDemo`: an executable that shows a floating island with the default configuration. You can drag it, resize it and light its glow.
+- The MIT license.
 - Docs: README, `docs/Architecture.md`, `docs/Configuration.md` and `docs/Geometry.md`.
 
 ### From the extraction (2026-11-05)

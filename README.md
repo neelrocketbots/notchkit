@@ -22,7 +22,7 @@ NotchKit reads no environment variables and no `UserDefaults`, and logs nothing.
 
 ## Requirements
 
-- **macOS 26 or later.** This is the floor of the app NotchKit was extracted from. It may move; see "Open decisions".
+- **macOS 26 or later.** This is the same floor as the app NotchKit was extracted from. The touch-display path also checks for macOS 27.
 - Swift 6.2 toolchain (Xcode 26 or later).
 - Swift Package Manager.
 
@@ -118,9 +118,11 @@ Coming next, in this order:
 
 Until those land, a client owns its panel and its state, as `Examples/NotchKitDemo` shows.
 
+## License
+
+MIT. See [LICENSE](LICENSE).
+
 ## Open decisions
 
-- **License: TBD by owner.** No license file yet. Until one is added, all rights are reserved.
-- **macOS floor.** macOS 26, as in the source app. The touch path checks for macOS 27. A lower floor would need fallbacks, for example for `pointerStyle`.
 - **Naming.** The package and its types use `Notch…`. The docs and some defaults still say "island", for example the VoiceOver strings "Island height" and "Move island".
 - **Defaults.** The default look is the source app's: coral-to-marigold glow and its sizes. A neutral default may suit a public library better.
