@@ -2,12 +2,19 @@
 
 All notable changes to NotchKit. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). There are no tagged versions yet.
 
+## Planned
+
+- **Neutral defaults**, only if the repository goes public. Today the defaults are the source app's look: the coral-to-marigold glow and its sizes.
+- **Scrub the source app's decision references** (for example "Decision 53" or "R38") from comments before the repository goes public.
+- **Sizes and behaviour into `NotchConfiguration`** (`metrics`, `behaviour`). This comes after the controller, panel, content slots and demo steps (PR4–PR7). Today they are `static let`s.
+
 ## [Unreleased]
 
 ### Added
 - A standalone SwiftPM package (`NotchKit` library, `NotchKitTests`), extracted from Hiccup with the history of its NotchKit sources and tests.
 - `Examples/NotchKitDemo`: an executable that shows a floating island with the default configuration. You can drag it, resize it and light its glow.
 - The MIT license.
+- `NotchStringsTests`. VoiceOver's words (the resize handle's label and value, the move grip's label, Dock and the corner actions) come from `NotchConfiguration.strings`. The defaults keep the island wording, a client's words replace every label, and a source scan keeps literals out of the views.
 - Docs: README, `docs/Architecture.md`, `docs/Configuration.md` and `docs/Geometry.md`.
 
 ### From the extraction (2026-11-05)
