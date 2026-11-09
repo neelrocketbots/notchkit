@@ -55,6 +55,8 @@ These are the words NotchKit's own controls speak, as VoiceOver labels, values a
 
 ## `motion`
 
+![The demo's glow turning, once round every 6 s](images/demo-turn.gif)
+
 | Field | Default | What it is |
 |---|---|---|
 | `glowSweep` | 1.6 s | One sweep of the glow once round the island. |
