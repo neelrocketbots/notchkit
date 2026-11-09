@@ -14,5 +14,7 @@ let package = Package(
         .testTarget(name: "NotchKitTests", dependencies: ["NotchKit"]),
         // A minimal client: a floating island with the default configuration (`swift run NotchKitDemo`).
         .executableTarget(name: "NotchKitDemo", dependencies: ["NotchKit"], path: "Examples/NotchKitDemo"),
+        // The docs' figures, rendered from NotchKit's views and values into docs/images (`swift run NotchKitDocImages`).
+        .executableTarget(name: "NotchKitDocImages", dependencies: ["NotchKit"], path: "Examples/NotchKitDocImages"),
     ]
 )

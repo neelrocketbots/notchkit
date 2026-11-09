@@ -25,6 +25,8 @@ NotchKit reads no environment variables and no `UserDefaults` of its own. A clie
 
 ## `appearance`
 
+![The backdrop folded, idle, expanded and floating, with the default appearance](images/backdrop-states.png)
+
 | Field | Default | What it is |
 |---|---|---|
 | `fill` | `#000000` | The island's own fill: the notch's black. The folded and idle islands, the notch band and the solid body use it. |
