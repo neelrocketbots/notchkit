@@ -85,14 +85,16 @@ struct FloatingIsland: View {
 }
 ```
 
-`Examples/NotchKitDemo` is a complete, runnable version of this, with the panel, the driver and the "one frame owner" hosting:
+`Examples/NotchKitDemo` is a complete, runnable client: it starts docked under the notch, pulls out as a floating card when you drag its header, and snaps back when you push it against the top and let go. It has the panel, the driver and the "one frame owner" hosting:
 
 ```sh
 swift run NotchKitDemo
-swift run NotchKitDemo --glow sweep   # or turn: light the glow from launch
+swift run NotchKitDemo --floating       # start as the floating card
+swift run NotchKitDemo --glow sweep     # or turn: light the glow from launch
+swift run NotchKitDemo --snap           # float out and snap back, in a loop
 ```
 
-![The demo's glow sweeping once round the island](docs/images/demo-sweep.gif)
+![The demo pulling out of the notch and snapping back](docs/images/demo-snap.gif)
 
 ## Building and testing
 
@@ -104,7 +106,7 @@ swift test
 The tests use Swift Testing. They cover the geometry, shape, dock motion, bleed and ink, float rules, stored prefs, resize, hit rect, glow values and calibration, frost look and stops, shadow and grip. They also include the dependency source scan.
 
 The figures in `docs/images` are rendered from NotchKit's own views and values by `swift run NotchKitDocImages`. Run it after a change to the geometry or the look, and commit the new PNGs.
-The two GIFs are recordings of `NotchKitDemo --glow sweep` and `--glow turn`, made with `screencapture -v` and ffmpeg.
+The GIFs are recordings of `NotchKitDemo --snap`, `--glow sweep` and `--glow turn`, made with `screencapture -v` and ffmpeg.
 
 ## Documentation
 
