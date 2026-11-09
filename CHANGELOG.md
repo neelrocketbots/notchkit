@@ -4,8 +4,7 @@ All notable changes to NotchKit. The format follows [Keep a Changelog](https://k
 
 ## Planned
 
-- **Neutral defaults**, only if the repository goes public. Today the defaults are the source app's look: the coral-to-marigold glow and its sizes.
-- **Scrub the source app's decision references** (for example "Decision 53" or "R38") from comments before the repository goes public.
+- **Neutral defaults.** Today the defaults are the source app's look: the coral-to-marigold glow and its sizes.
 - **Sizes and behaviour into `NotchConfiguration`** (`metrics`, `behaviour`). This comes after the controller, panel, content slots and demo steps (PR4–PR7). Today they are `static let`s.
 
 ## [Unreleased]

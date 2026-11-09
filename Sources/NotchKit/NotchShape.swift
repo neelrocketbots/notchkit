@@ -162,7 +162,7 @@ public struct NotchOutline: Shape {
     }
 }
 
-/// The island on a Dynamic Island display (Decision 71 (b)): an iPhone-style pill, a continuous rounded rect
+/// The island on a Dynamic Island display : an iPhone-style pill, a continuous rounded rect
 /// with no concave shoulders (nothing hangs from a screen edge there). Folded it is a capsule (radius 16 on the 32 pt
 /// pill), expanded the corners reach the notch island's 26 pt (`NotchGeometry.pillCornerRadius(expansion:)`).
 public struct NotchPillShape: Shape {

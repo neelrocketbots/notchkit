@@ -30,7 +30,7 @@ public enum NotchGlow {
     /// The backlight: 30%, 35% while the gradient turns.
     public static func haloOpacity(turning: Bool) -> Double { turning ? 0.35 : 0.30 }
 
-    /// What each state draws (Decision 53). The client decides the state, so there is no hover or scroll input here. A sweep runs the trace once round and does not turn; under
+    /// What each state draws. The client decides the state, so there is no hover or scroll input here. A sweep runs the trace once round and does not turn; under
     /// Reduce Motion nothing moves, and a sweep shows still at full. Glow off in Settings: the plain outline instead.
     public static func appearance(for state: NotchGlowState, on: Bool, reduceMotion: Bool) -> NotchGlowAppearance {
         switch state {
@@ -82,7 +82,7 @@ public enum NotchGlowAppearance: Equatable, Sendable {
     case none, gradient(turning: Bool, halo: Double), sweep(halo: Double), whiteOutline
 }
 
-/// What the glow follows (Decision 53, Decision 71): the notch island's edge, a plain display's folded 1 pt strip, or
+/// What the glow follows: the notch island's edge, a plain display's folded 1 pt strip, or
 /// the pill (on a Dynamic Island display, or floating).
 public enum NotchGlowShape: Equatable, Sendable {
     case notch(shoulder: Double, bottomRadius: Double)
@@ -106,7 +106,7 @@ public enum NotchGlowShape: Equatable, Sendable {
     }
 }
 
-/// The glow as the island's indicator (Decision 53): a 2.6 pt trace of the configured gradient along the outline and
+/// The glow as the island's indicator: a 2.6 pt trace of the configured gradient along the outline and
 /// the island's shape, blurred, behind it as a backlight. It fills the frame it is given (the island's rect) and draws
 /// outside the island's edge only (the trace's full 2.6 pt lies outside it, so the island's black over the glow does not
 /// hide any of it, and an unfilled pill or strip shows the same width), so the caller fills the island's black over it. Off draws nothing; a sweep runs the
@@ -294,7 +294,7 @@ struct NotchGlowPath: Shape {
     }
 }
 
-/// A by-eye match of the folded glow to the physical notch (R38): the folded notch's outline moved in by `inset` on the
+/// A by-eye match of the folded glow to the physical notch: the folded notch's outline moved in by `inset` on the
 /// sides and the bottom, `widthDelta` and `heightDelta` points larger (the width centred), `xOffset` and `yOffset` points
 /// right and down, with `bottomRadius` corners (nil: the folded radius). A client reads the values (its own debug
 /// settings) and passes them in `NotchConfiguration.Debug.glowCalibration`.

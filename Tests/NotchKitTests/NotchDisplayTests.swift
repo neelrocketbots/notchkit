@@ -4,7 +4,7 @@ import NotchKit
 import Testing
 
 @Suite struct NotchDisplayTests {
-    /// Decision 71 (a): one pure rule, a case per kind; a display's default kind follows its notch.
+    /// One pure rule, a case per kind; a display's default kind follows its notch.
     @Test func classifiesEachDisplayKind() {
         // a hardware notch: built in, a safe area, a notch-wide gap between the auxiliary areas (1512 − 646 − 646 = 220)
         #expect(NotchDisplayKind.classify(isBuiltIn: true, safeAreaTop: 38, auxiliaryLeftWidth: 646, auxiliaryRightWidth: 646, screenWidth: 1512, multiTouch: false) == .notch)

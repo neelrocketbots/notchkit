@@ -31,7 +31,7 @@ NotchKit reads no environment variables and no `UserDefaults`, and logs nothing.
 ```swift
 // Package.swift
 dependencies: [
-    .package(url: "git@github.com:neelrocketbots/notchkit.git", branch: "main"),
+    .package(url: "https://github.com/neelrocketbots/notchkit.git", branch: "main"),
 ],
 targets: [
     .target(name: "MyApp", dependencies: [.product(name: "NotchKit", package: "notchkit")]),

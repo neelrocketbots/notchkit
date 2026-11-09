@@ -37,7 +37,7 @@ import Testing
         #expect(abs(half.x - rect.midX) < 0.5 && abs(half.y - rect.maxY) < 0.5, "halfway is the middle of the bottom edge")
     }
 
-    /// Decision 71 (b): the pill on a Dynamic Island display is a continuous rounded rect with no shoulders: a
+    /// The pill on a Dynamic Island display is a continuous rounded rect with no shoulders: a
     /// capsule at radius 16 on the 32 pt pill, the notch island's 26 pt expanded.
     @Test func thePillIsAContinuousRoundedRectWithoutShoulders() {
         let pill = CGRect(x: 0, y: 0, width: 200, height: 32)

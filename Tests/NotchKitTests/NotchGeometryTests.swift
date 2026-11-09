@@ -5,7 +5,7 @@ import SwiftUI
 import Testing
 
 @Suite struct NotchGeometryTests {
-    /// Decision 52: every size derives from the notch; a 14" (220 × 38) gives 480 × 288 expanded, 480 × 200 idle; corners 9 → 26, shoulders 6 → 12.
+    /// Every size derives from the notch; a 14" (220 × 38) gives 480 × 288 expanded, 480 × 200 idle; corners 9 → 26, shoulders 6 → 12.
     @Test func sizesDeriveFromTheNotch() {
         let g = NotchGeometry.make(notch: Notch(width: 220, height: 38), builtInNotchWidth: 220, menuBarHeight: 24)
         #expect(g.hasHardwareNotch && g.notch == CGSize(width: 220, height: 38))
@@ -13,9 +13,9 @@ import Testing
         #expect(g.panelSize == CGSize(width: 584, height: 340))
         #expect(g.collapsedRect == CGRect(x: (584 - 220) / 2, y: 0, width: 220, height: 38) && g.hoverTarget == g.collapsedRect)
         #expect(NotchGeometry.cornerRadius(expansion: 0) == 9 && NotchGeometry.cornerRadius(expansion: 1) == 26 && NotchGeometry.cornerRadius(expansion: 0.5) == 17.5)
-        #expect(NotchGeometry.shoulder(expansion: 0) == 0 && NotchGeometry.shoulder(expansion: 1) == 12, "R38: folded is the notch, no flare")
+        #expect(NotchGeometry.shoulder(expansion: 0) == 0 && NotchGeometry.shoulder(expansion: 1) == 12, "Folded is the notch, no flare")
         let thirteen = NotchGeometry.make(notch: Notch(width: 200, height: 32), builtInNotchWidth: 200, menuBarHeight: 24)
-        #expect(thirteen.expandedSize == CGSize(width: 460, height: 282) && thirteen.expandedSize.height / 956 < 0.3, "within the top 30% of the 13.6\" Air's 956 pt (Decision 52)")
+        #expect(thirteen.expandedSize == CGSize(width: 460, height: 282) && thirteen.expandedSize.height / 956 < 0.3, "within the top 30% of the 13.6\" Air's 956 pt")
         #expect(g.bodyRect == CGRect(x: 52 + 12, y: 38 + 2, width: 480 - 24, height: 288 - 38 - 2 - 8), "the body: inset 12 from the island's edge, 2 under the band, 8 above the bottom, in panel coordinates")
         #expect(NotchGeometry.fallback == NotchGeometry.make(notch: nil, builtInNotchWidth: 0, menuBarHeight: 24))
     }
@@ -29,7 +29,7 @@ import Testing
     }
 
 
-    /// Decision 22: a plain display gets a virtual notch (the built-in's width, else 200) × the menu bar height; folded draws nothing; the strip is the hover target.
+    /// A plain display gets a virtual notch (the built-in's width, else 200) × the menu bar height; folded draws nothing; the strip is the hover target.
     @Test func aPlainDisplayGetsAVirtualNotchAndAStrip() {
         let g = NotchGeometry.make(notch: nil, builtInNotchWidth: 220, menuBarHeight: 25)
         #expect(!g.hasHardwareNotch && g.notch == CGSize(width: 220, height: 25) && g.expandedSize == CGSize(width: 480, height: 275))
@@ -39,7 +39,7 @@ import Testing
     }
 
 
-    /// Decision 71 (b): a Dynamic Island display gets its own pill under the system island: 200 × 32, its top 6 pt below the menu bar, expanded by the notch's +260/+250 and, on touch, +26 pt per ear (Ask bar mockups v3); the notch and plain numbers are unchanged.
+    /// A Dynamic Island display gets its own pill under the system island: 200 × 32, its top 6 pt below the menu bar, expanded by the notch's +260/+250 and, on touch, +26 pt per ear; the notch and plain numbers are unchanged.
     @Test func aDynamicIslandDisplayGetsAPillUnderTheSystemIsland() {
         let g = NotchGeometry.make(notch: nil, builtInNotchWidth: 0, menuBarHeight: 37, dynamicIsland: true, touch: true)
         #expect(g.kind == .dynamicIsland && !g.hasHardwareNotch && g.touch && g.position == .centre, "Centre is the default")
@@ -56,7 +56,7 @@ import Testing
     }
 
 
-    /// Decision 71 (b): Position docks the pill and the expanded island at the same top: Centre on the camera, Left 12 pt from the left edge (growing right), Right 12 pt from the right edge (growing left); a notch ignores it.
+    /// Position docks the pill and the expanded island at the same top: Centre on the camera, Left 12 pt from the left edge (growing right), Right 12 pt from the right edge (growing left); a notch ignores it.
     @Test func thePillDocksCentreLeftOrRight() {
         #expect(NotchDockPosition.allCases == [.centre, .left, .right] && NotchGeometry.dockInset == 12)
         let centre = NotchGeometry.make(notch: nil, builtInNotchWidth: 0, menuBarHeight: 37, dynamicIsland: true, position: .centre)

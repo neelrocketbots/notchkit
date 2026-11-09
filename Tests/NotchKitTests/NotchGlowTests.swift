@@ -20,7 +20,7 @@ import Testing
     @Test func theGlowTurnsForALookupAndSweepsOnceForACardOrMarker() {
         #expect(NotchGlow.appearance(for: .off, on: true, reduceMotion: false) == .none)
         #expect(NotchGlow.appearance(for: .turning, on: true, reduceMotion: false) == .gradient(turning: true, halo: 0.35))
-        #expect(NotchGlow.appearance(for: .sweep(serial: 1), on: true, reduceMotion: false) == .sweep(halo: 0.30), "Decision 53: a sweep runs the trace once and does not turn; the halo stays at 30%")
+        #expect(NotchGlow.appearance(for: .sweep(serial: 1), on: true, reduceMotion: false) == .sweep(halo: 0.30), "A sweep runs the trace once and does not turn; the halo stays at 30%")
         #expect(NotchGlow.appearance(for: .turning, on: true, reduceMotion: true) == .gradient(turning: false, halo: 0.30), "Reduce Motion: still")
         #expect(NotchGlow.appearance(for: .sweep(serial: 2), on: true, reduceMotion: true) == .gradient(turning: false, halo: 0.30), "Reduce Motion: a sweep shows still at full and fades")
     }
@@ -40,7 +40,7 @@ import Testing
     }
 
 
-    /// Decision 53: a sweep's gradient runs once round, 0 to 360 degrees over 1.6 s, linear, and stops there.
+    /// A sweep's gradient runs once round, 0 to 360 degrees over 1.6 s, linear, and stops there.
     @Test func aSweepRunsOnceRoundOver1600Milliseconds() {
         #expect(NotchConfiguration.Motion().glowSweep == .milliseconds(1600))
         #expect(NotchGlow.sweepAngle(elapsed: 0) == 0 && abs(NotchGlow.sweepAngle(elapsed: 0.8) - 180) < 0.001 && abs(NotchGlow.sweepAngle(elapsed: 1.6) - 360) < 0.001)
@@ -48,13 +48,13 @@ import Testing
     }
 
 
-    /// Where the glow goes (Decision 53, Decision 71): round the notch's visible edge, along the 1 pt strip on a plain display
+    /// Where the glow goes: round the notch's visible edge, along the 1 pt strip on a plain display
     /// folded, round the pill on a Dynamic Island display (folded too: nothing is filled there).
     @Test func theGlowFollowsTheDisplaysIsland() {
         let notched = NotchGeometry.make(notch: Notch(width: 200, height: 38), builtInNotchWidth: 200, menuBarHeight: 38)
         let plain = NotchGeometry.make(notch: nil, builtInNotchWidth: 0, menuBarHeight: 24)
         let pill = NotchGeometry.make(notch: nil, builtInNotchWidth: 0, menuBarHeight: 37, dynamicIsland: true, touch: true)
-        #expect(NotchGlowShape.of(notched, expansion: 0) == .notch(shoulder: 0, bottomRadius: 9), "folded: the notch rect's edge, no shoulders (R38)")
+        #expect(NotchGlowShape.of(notched, expansion: 0) == .notch(shoulder: 0, bottomRadius: 9), "folded: the notch rect's edge, no shoulders")
         #expect(NotchGlowShape.of(notched, expansion: 1) == .notch(shoulder: 12, bottomRadius: 26))
         #expect(NotchGlowShape.of(plain, expansion: 0) == .strip, "a plain display folded: the 1 pt strip")
         #expect(NotchGlowShape.of(plain, expansion: 1) == .notch(shoulder: 12, bottomRadius: 26), "expanded it is the island")

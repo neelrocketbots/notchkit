@@ -1,12 +1,12 @@
 import CoreGraphics
 import Foundation
 
-/// Where the island docks on a Dynamic Island display (Decision 71 (b)): centred on the camera (the default), or
+/// Where the island docks on a Dynamic Island display: centred on the camera (the default), or
 /// `NotchGeometry.dockInset` from the left or the right edge. A notch or a plain display ignores it.
 public enum NotchDockPosition: String, Codable, Sendable, CaseIterable { case centre, left, right }
 
-/// The island's sizes on one display, all derived from its notch (Decision 52): the hardware notch, a plain display's
-/// virtual notch (Decision 22) or a Dynamic Island display's pill (Decision 71). Rects are in the panel's content, with a
+/// The island's sizes on one display, all derived from its notch: the hardware notch, a plain display's
+/// virtual notch or a Dynamic Island display's pill. Rects are in the panel's content, with a
 /// top-left origin. A client adds its own sizes in an extension; the island's height past its own (an open reply, a
 /// growing field) is the client's `growth` (`panelSize(growth:)`).
 public struct NotchGeometry: Equatable, Sendable {
@@ -24,7 +24,7 @@ public struct NotchGeometry: Equatable, Sendable {
     /// Where the pointer peeks the folded island: the notch rect or the pill, else the 1 pt top-centre strip plus 6 pt.
     public var hoverTarget: CGRect
     public var kind: NotchDisplayKind
-    /// The display takes touch (Decision 71 (c)): hit areas of at least `minTouchTarget`.
+    /// The display takes touch: hit areas of at least `minTouchTarget`.
     public var touch: Bool
     /// Read only on a Dynamic Island display.
     public var position: NotchDockPosition
@@ -54,7 +54,7 @@ public struct NotchGeometry: Equatable, Sendable {
     /// curves stay parallel; never under `minNestedRadius` (the inset can exceed the outer radius).
     public static func nested(outer: Double, inset: Double) -> Double { max(minNestedRadius, outer - inset) }
     public static let minNestedRadius: Double = 6
-    /// The concave shoulders, none folded (the island is the notch: straight sides, no flare, R38) to 12 pt expanded.
+    /// The concave shoulders, none folded (the island is the notch: straight sides, no flare) to 12 pt expanded.
     public static func shoulder(expansion: Double) -> Double { 12 * expansion }
 
     /// The body is inset 12 pt from the island's outer edge (the shoulders are drawn inside it), from 2 pt below the band
