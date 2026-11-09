@@ -23,6 +23,7 @@ jobs:
           awk -v v="$version" '
             $0 ~ "^## \\[" v "\\]" { on = 1; next }
             on && /^## / { exit }
+            on && /^\[[^]]+\]: / { exit }   # the link references at the file's end
             on { print }
           ' CHANGELOG.md > notes.md
           if [ ! -s notes.md ]; then
