@@ -89,7 +89,10 @@ struct FloatingIsland: View {
 
 ```sh
 swift run NotchKitDemo
+swift run NotchKitDemo --glow sweep   # or turn: light the glow from launch
 ```
+
+![The demo's glow sweeping once round the island](docs/images/demo-sweep.gif)
 
 ## Building and testing
 
@@ -101,6 +104,7 @@ swift test
 The tests use Swift Testing. They cover the geometry, shape, dock motion, bleed and ink, float rules, stored prefs, resize, hit rect, glow values and calibration, frost look and stops, shadow and grip. They also include the dependency source scan.
 
 The figures in `docs/images` are rendered from NotchKit's own views and values by `swift run NotchKitDocImages`. Run it after a change to the geometry or the look, and commit the new PNGs.
+The two GIFs are recordings of `NotchKitDemo --glow sweep` and `--glow turn`, made with `screencapture -v` and ffmpeg.
 
 ## Documentation
 

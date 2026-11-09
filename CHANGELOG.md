@@ -16,6 +16,7 @@ All notable changes to NotchKit. The format follows [Keep a Changelog](https://k
 - `NotchStringsTests`. VoiceOver's words (the resize handle's label and value, the move grip's label, Dock and the corner actions) come from `NotchConfiguration.strings`. The defaults keep the island wording, a client's words replace every label, and a source scan keeps literals out of the views.
 - Docs: README, `docs/Architecture.md`, `docs/Configuration.md` and `docs/Geometry.md`.
 - Figures in the docs, rendered from NotchKit's views and values by `Examples/NotchKitDocImages` (`swift run NotchKitDocImages`): display kinds, sizes, the shape, the backdrop, the bleed, the glow and the handles.
+- `NotchKitDemo --glow sweep|turn` lights the glow from launch and prints the panel's frame, for recordings; two GIFs of the glow in the docs.
 
 ### From the extraction (2026-11-05)
 - **Displays.** `Notch`, `NotchDisplay`, `NotchVisibleInsets`, `NotchDisplayKind.classify` and `NotchScreens.displays(measured:)`.

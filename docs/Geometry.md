@@ -141,6 +141,8 @@ A floating island dragged toward the notch takes in the notch's black from its t
 
 ![The glow on the expanded notch island, the folded notch and a plain display's strip](images/glow-shapes.png)
 
+![The demo's glow turning, once round every 6 s](images/demo-turn.gif)
+
 - **What it draws.** A 2.6 pt gradient trace (start → end → start) along the outline, outside the island's edge. Behind it, the island's own shape is blurred as a backlight.
 - **Backlight.** Expanded: 8 pt out, 24 pt blur. Folded: 10 pt out, 32 pt blur, a little wider and softer. In between it interpolates with the expansion. Its opacity is 30 %, and 35 % while turning.
 - **States.** Off draws nothing. Turning goes round once every 6 s, redrawn at 30 fps. A sweep runs once round in 1.6 s, redrawn at 60 fps, and each new serial restarts it. A sweep that starts during a turn carries on from the turn's angle. When its state ends, the glow fades out over 200 ms.

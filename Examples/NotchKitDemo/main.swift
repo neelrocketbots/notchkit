@@ -197,6 +197,26 @@ final class DemoPanel: NSPanel {
         panel.orderFrontRegardless()
         self.panel = panel
         self.island = island
+        lightGlowIfAsked(island, panel: panel)
+    }
+
+    /// `--glow sweep|turn`, for the docs' recordings: a sweep every 2.5 s or a steady turn from launch, and the panel's
+    /// frame printed in top-left screen points (`panel x y w h`) so a recorder can frame it.
+    private func lightGlowIfAsked(_ island: DemoIsland, panel: NSPanel) {
+        let args = CommandLine.arguments
+        guard let i = args.firstIndex(of: "--glow"), i + 1 < args.count else { return }
+        switch args[i + 1] {
+        case "turn": island.toggleTurning()
+        case "sweep":
+            island.sweep()
+            Timer.scheduledTimer(withTimeInterval: 2.5, repeats: true) { _ in Task { @MainActor in island.sweep() } }
+        default: break
+        }
+        if let primary = NSScreen.screens.first {
+            let f = panel.frame
+            print("panel \(Int(f.minX)) \(Int(primary.frame.maxY - f.maxY)) \(Int(f.width)) \(Int(f.height))")
+            fflush(stdout)
+        }
     }
 }
 
