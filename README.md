@@ -107,7 +107,7 @@ The tests use Swift Testing. They cover the geometry, shape, dock motion, bleed 
 
 ## Status
 
-NotchKit was extracted from Hiccup, a macOS meeting assistant whose live surface is a notch island. This repository holds the first three extraction steps: the displays, the pure maths and the look. Its git history is the history of those steps.
+NotchKit was extracted from a macOS app whose live surface is a notch island. This repository holds the first three extraction steps: the displays, the pure maths and the look. Its git history is the history of those steps.
 
 Coming next, in this order:
 

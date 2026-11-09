@@ -10,7 +10,7 @@ All notable changes to NotchKit. The format follows [Keep a Changelog](https://k
 ## [Unreleased]
 
 ### Added
-- A standalone SwiftPM package (`NotchKit` library, `NotchKitTests`), extracted from Hiccup with the history of its NotchKit sources and tests.
+- A standalone SwiftPM package (`NotchKit` library, `NotchKitTests`), extracted from the app it was built in, with the history of its NotchKit sources and tests.
 - `Examples/NotchKitDemo`: an executable that shows a floating island with the default configuration. You can drag it, resize it and light its glow.
 - The MIT license.
 - `NotchStringsTests`. VoiceOver's words (the resize handle's label and value, the move grip's label, Dock and the corner actions) come from `NotchConfiguration.strings`. The defaults keep the island wording, a client's words replace every label, and a source scan keeps literals out of the views.

@@ -1,14 +1,12 @@
 import Foundation
 import Testing
 
-/// NotchKit is the island's chrome for any client (owner 2026-11-05): it imports only Apple's frameworks, names nothing of
-/// Hiccup's (Core, Overlay, DesignSystem, the island's tokens and copy, the app's defaults) and reads no environment or
-/// defaults of its own; a client injects everything.
+/// NotchKit is the island's chrome for any client (owner 2026-11-05): it imports only Apple's frameworks, names no client module and
+/// reads no environment or defaults of its own; a client injects everything.
 @Suite struct NotchKitSourceScanTests {
     static let allowedImports: Set<String> = ["AppKit", "SwiftUI", "Observation", "os", "CoreGraphics", "Foundation"]
-    /// Hiccup's modules and names, and the process-wide inputs NotchKit must not read.
-    static let banned = ["Hiccup", "HICCUP_", "IslandTokens", "IslandCopy", "IslandModel", "IslandPanel", "AppSupportLocation",
-                         "ProcessInfo", "UserDefaults", "CFPreferences", "DesignSystem", "io.saynomore"]
+    /// The process-wide inputs NotchKit must not read.
+    static let banned = ["ProcessInfo", "UserDefaults", "CFPreferences"]
 
     static var sourceDir: URL {
         URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
@@ -21,7 +19,7 @@ import Testing
         return try files.map { ($0.lastPathComponent, try String(contentsOf: $0, encoding: .utf8)) }
     }
 
-    @Test func notchKitDependsOnNothingOfHiccups() throws {
+    @Test func notchKitDependsOnNothingOfTheClients() throws {
         let sources = try Self.sources()
         #expect(!sources.isEmpty, "NotchKit's sources are found")
         for (name, text) in sources {
@@ -36,9 +34,9 @@ import Testing
         }
     }
 
-    /// The scan itself: it catches a client's module, a Hiccup name and an environment read.
+    /// The scan itself: it catches a client's module and an environment read.
     @Test func theScanCatchesWhatItBans() {
-        let bad = "import Core\nlet x = ProcessInfo.processInfo.environment[\"HICCUP_X\"]\n"
+        let bad = "import Core\nlet x = ProcessInfo.processInfo.environment[\"X\"]\n"
         #expect(!Self.allowedImports.contains("Core"))
         #expect(Self.banned.contains { bad.contains($0) })
     }
