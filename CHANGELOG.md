@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to NotchKit. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions are git tags (`vX.Y.Z`); the Release workflow publishes each version's section here as its notes. There are no tagged versions yet.
+All notable changes to NotchKit. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions are git tags (`vX.Y.Z`); the Release workflow publishes each version's section here as its notes.
 
 ## Planned
 
@@ -8,6 +8,12 @@ All notable changes to NotchKit. The format follows [Keep a Changelog](https://k
 - **Sizes and behaviour into `NotchConfiguration`** (`metrics`, `behaviour`). This comes after the controller, panel, content slots and demo steps (PR4–PR7). Today they are `static let`s.
 
 ## [Unreleased]
+
+Nothing yet.
+
+## [0.1.0] - 2026-11-09
+
+The first tagged version: the displays, the pure maths and the look, extracted from the app NotchKit was built in.
 
 ### Added
 - A standalone SwiftPM package (`NotchKit` library, `NotchKitTests`), extracted from the app it was built in, with the history of its NotchKit sources and tests.
@@ -34,3 +40,6 @@ All notable changes to NotchKit. The format follows [Keep a Changelog](https://k
   - The handles: `NotchResizeHandle`, `NotchMoveGesture`, `NotchMoveArea`, `NotchGrip`, `NotchGripDots` and the grip's VoiceOver actions, all over a `NotchHandleDriver`.
 - **Configuration.** `NotchConfiguration` covers appearance, strings, motion and debug, read from the environment. Its defaults are the shipped look.
 - **Source scan.** It checks that NotchKit imports only Apple's frameworks and reads no environment variables or defaults.
+
+[Unreleased]: https://github.com/neelrocketbots/notchkit/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/neelrocketbots/notchkit/releases/tag/v0.1.0
