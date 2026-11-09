@@ -1,5 +1,7 @@
 # NotchKit
 
+[![CI](https://github.com/neelrocketbots/notchkit/actions/workflows/ci.yml/badge.svg)](https://github.com/neelrocketbots/notchkit/actions/workflows/ci.yml)
+
 A chrome kit for a notch "island" on macOS: the black shape that grows out of a MacBook's notch, folds back into it, and can be pulled out as a floating card.
 
 NotchKit draws and measures the island. Your app decides what goes inside it and when it opens.

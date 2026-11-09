@@ -30,8 +30,12 @@ public enum NotchScreens {
             let frame = screen.frame
             let number = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber
             let isBuiltIn = number.map { CGDisplayIsBuiltin($0.uint32Value) != 0 } ?? false
-            let multiTouch: Bool
-            if #available(macOS 27, *) { multiTouch = screen.touchCapabilities.contains(.multiTouch) } else { multiTouch = false }
+            // `NSScreen.touchCapabilities` needs the macOS 27 SDK (Xcode 27, Swift 6.4) as well as macOS 27 at run time;
+            // built with Xcode 26 the package treats every display as touch-free.
+            var multiTouch = false
+            #if compiler(>=6.4)
+            if #available(macOS 27, *) { multiTouch = screen.touchCapabilities.contains(.multiTouch) }
+            #endif
             let left = screen.auxiliaryTopLeftArea, right = screen.auxiliaryTopRightArea
             let kind = NotchDisplayKind.classify(isBuiltIn: isBuiltIn, safeAreaTop: screen.safeAreaInsets.top,
                                                  auxiliaryLeftWidth: left.map { Double($0.width) }, auxiliaryRightWidth: right.map { Double($0.width) },

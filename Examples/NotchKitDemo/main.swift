@@ -170,7 +170,7 @@ let margin = NotchGeometry.outset + NotchGeometry.blur + NotchGeometry.overshoot
         guard let panel else { return }
         switch input {
         case .began(let p):
-            resizeStart = (p, size.height, panel.frame.maxY)
+            resizeStart = (p, Double(size.height), Double(panel.frame.maxY))
         case .changed(let p):
             guard let s = resizeStart else { return }
             // AppKit's y grows upward: dragging the bottom edge down makes the island taller.
