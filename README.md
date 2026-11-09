@@ -18,6 +18,8 @@ NotchKit draws and measures the island. Your app decides what goes inside it and
 - **Grip and handles.** `NotchResizeHandle` is the bottom grab line. `NotchMoveGesture` and `NotchMoveArea` drag the island. `NotchGripDots` draws the ::: grip. The grip has VoiceOver actions: Dock and the four corners. All of them drive your model through `NotchHandleDriver`.
 - **Configuration.** `NotchConfiguration`, read from the SwiftUI environment, sets colours, frost material and overlay, the floating look, handle inks, glow gradient and timing, accessibility strings and an optional glow calibration. The defaults reproduce the shipped look.
 
+![The island's shape at expansion 0, 0.5 and 1](docs/images/shape-states.png)
+
 NotchKit reads no environment variables and no `UserDefaults`, and logs nothing. A client injects everything. A source-scan test guards this (`NotchKitSourceScanTests`).
 
 ## Requirements
@@ -87,7 +89,10 @@ struct FloatingIsland: View {
 
 ```sh
 swift run NotchKitDemo
+swift run NotchKitDemo --glow sweep   # or turn: light the glow from launch
 ```
+
+![The demo's glow sweeping once round the island](docs/images/demo-sweep.gif)
 
 ## Building and testing
 
@@ -97,6 +102,9 @@ swift test
 ```
 
 The tests use Swift Testing. They cover the geometry, shape, dock motion, bleed and ink, float rules, stored prefs, resize, hit rect, glow values and calibration, frost look and stops, shadow and grip. They also include the dependency source scan.
+
+The figures in `docs/images` are rendered from NotchKit's own views and values by `swift run NotchKitDocImages`. Run it after a change to the geometry or the look, and commit the new PNGs.
+The two GIFs are recordings of `NotchKitDemo --glow sweep` and `--glow turn`, made with `screencapture -v` and ffmpeg.
 
 ## Documentation
 

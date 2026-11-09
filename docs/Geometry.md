@@ -6,6 +6,8 @@ Coordinates: `NotchDisplay` frames use points with a top-left origin at the main
 
 ## Displays
 
+![The folded island on a notch, a Dynamic Island and a plain display](images/display-kinds.png)
+
 `NotchScreens.displays(measured:)` reads every `NSScreen`:
 
 - frame, `isMain`, `isBuiltIn`
@@ -25,6 +27,8 @@ The optional `measured` callback gets each notch's raw values, for a client's ca
 5. Anything else is plain.
 
 ## Sizes derived from the notch (`NotchGeometry`)
+
+![The expanded island in its panel, with the folded, idle and body rects](images/geometry.png)
 
 Every size comes from the notch:
 
@@ -55,6 +59,8 @@ Where the island hangs:
 - The hover target is the notch rect, or the pill. On a plain display it is a 1 pt top-centre strip plus 6 pt below it.
 
 ## The shape (`NotchShape`)
+
+![The shape at expansion 0, 0.5 and 1](images/shape-states.png)
 
 `NotchShape(shoulder:bottomRadius:topRadius:)` draws the island:
 
@@ -110,6 +116,8 @@ The snap is a squash and stretch.
 
 ## Notch bleed
 
+![A floating island at 40, 20, 2 and 0 pt from the dock](images/bleed.png)
+
 A floating island dragged toward the notch takes in the notch's black from its top edge:
 
 - **Bleed.** `bleed(proposedTop:dockTop:)` is the top edge's proximity over the last 40 pt, eased in (squared) and capped at 0.9 until contact. 20 pt away it is 0.225. It reaches 1 only at contact, where the island docks on release.
@@ -121,6 +129,8 @@ A floating island dragged toward the notch takes in the notch's black from its t
 
 ## Grip (`NotchGrip`, `NotchGripDots`)
 
+![The grip and the resize line, at rest and lit](images/handles.png)
+
 - **Look.** 3 × 2 dots, 2.5 pt with 2.5 pt gaps, at 35 % at rest and 85 % lit. The hit area is 44 × 12.
 - **Floating.** The grip sits in the header's middle and is always shown.
 - **Docked.** It hides behind the notch, up inside the band. It slides down below the band while the pointer is on the notch's region (`dockedTop(band:shown:reduceMotion:)`).
@@ -128,6 +138,10 @@ A floating island dragged toward the notch takes in the notch's black from its t
 - **The folded pill.** The pill shows the same dots as a hint, with no target of its own.
 
 ## Glow (`NotchGlow`, `NotchGlowView`)
+
+![The glow on the expanded notch island, the folded notch and a plain display's strip](images/glow-shapes.png)
+
+![The demo's glow turning, once round every 6 s](images/demo-turn.gif)
 
 - **What it draws.** A 2.6 pt gradient trace (start → end → start) along the outline, outside the island's edge. Behind it, the island's own shape is blurred as a backlight.
 - **Backlight.** Expanded: 8 pt out, 24 pt blur. Folded: 10 pt out, 32 pt blur, a little wider and softer. In between it interpolates with the expansion. Its opacity is 30 %, and 35 % while turning.
@@ -138,6 +152,8 @@ A floating island dragged toward the notch takes in the notch's black from its t
 - **When to glow.** NotchKit has no hover or scroll input for this. The client decides.
 
 ## Frosted backdrop (`NotchBackdrop`)
+
+![The backdrop folded, idle, expanded and floating](images/backdrop-states.png)
 
 The expanded island's body is the frosted island:
 
