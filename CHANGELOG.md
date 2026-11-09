@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to NotchKit. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). There are no tagged versions yet.
+All notable changes to NotchKit. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versions are git tags (`vX.Y.Z`); the Release workflow publishes each version's section here as its notes. There are no tagged versions yet.
 
 ## Planned
 
@@ -16,6 +16,7 @@ All notable changes to NotchKit. The format follows [Keep a Changelog](https://k
 - `NotchStringsTests`. VoiceOver's words (the resize handle's label and value, the move grip's label, Dock and the corner actions) come from `NotchConfiguration.strings`. The defaults keep the island wording, a client's words replace every label, and a source scan keeps literals out of the views.
 - Docs: README, `docs/Architecture.md`, `docs/Configuration.md` and `docs/Geometry.md`.
 - CI: `swift build` and `swift test` on every pull request and push to `main`, on a macOS 26 runner.
+- Release workflow: a `vX.Y.Z` tag runs the tests and publishes a GitHub Release with that version's CHANGELOG section and the merged pull requests.
 - Figures in the docs, rendered from NotchKit's views and values by `Examples/NotchKitDocImages` (`swift run NotchKitDocImages`): display kinds, sizes, the shape, the backdrop, the bleed, the glow and the handles.
 - `NotchKitDemo` starts docked under the notch, pulls out as a floating card and snaps back: the detach, the pull and push stretch, the bleed, `touchesDock` and the snap spring, all through NotchKit's values. `--floating`, `--glow sweep|turn` and `--snap` set it up for recordings and print the panel's frame. Three GIFs in the docs.
 

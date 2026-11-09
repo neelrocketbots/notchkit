@@ -110,6 +110,17 @@ The tests use Swift Testing. They cover the geometry, shape, dock motion, bleed 
 The figures in `docs/images` are rendered from NotchKit's own views and values by `swift run NotchKitDocImages`. Run it after a change to the geometry or the look, and commit the new PNGs.
 The GIFs are recordings of `NotchKitDemo --snap`, `--glow sweep` and `--glow turn`, made with `screencapture -v` and ffmpeg.
 
+### Releasing
+
+Versions are git tags. To release `0.2.0`: in `CHANGELOG.md`, move the entries under `## [Unreleased]` to a new `## [0.2.0] - YYYY-MM-DD` heading, merge that, then tag and push:
+
+```sh
+git tag -s v0.2.0 -m "v0.2.0"
+git push origin v0.2.0
+```
+
+The Release workflow runs the tests, takes that section of the changelog as the notes, appends the merged pull requests by label (`feature`, `fix`, `docs`) and publishes the GitHub Release. A tag with a suffix, such as `v0.2.0-beta.1`, is marked a pre-release.
+
 ## Documentation
 
 - [docs/Architecture.md](docs/Architecture.md): the modules, what NotchKit owns and what the client owns, and the invariants.
