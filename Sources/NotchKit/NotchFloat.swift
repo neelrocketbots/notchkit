@@ -76,8 +76,9 @@ public enum NotchFloat {
     public static let pillSize = CGSize(width: 132, height: 30)
     /// The floating card's corners, all four; the pill is a capsule.
     public static let cornerRadius: Double = 26
-    /// Room round a floating island in its panel for the shadow and the glow (and above it, unlike a docked one).
-    public static let margin: Double = NotchGeometry.outset + NotchGeometry.blur
+    /// Room above a floating island in its panel for the glow (unlike a docked one, whose top is the screen's): the light
+    /// above the folded pill at the island's top (60 pt). Beside and below it the panel keeps the docked margins.
+    public static let margin: Double = Double(NotchGlow.reach(pill: true, expansion: 0, islandHeight: pillSize.height).above)
     /// The corner a VoiceOver action floats the island to sits this far in from the visible rect's edges.
     public static let cornerInset: Double = 16
 

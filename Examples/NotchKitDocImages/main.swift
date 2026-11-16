@@ -73,7 +73,7 @@ struct Docked: View {
     }
 }
 
-/// A floating island: the card with frost, border and shadow, and the notch's black bled in from its top edge.
+/// A floating island: the card with frost and shadow, and the notch's black bled in from its top edge.
 struct Floating: View {
     var size: CGSize
     var bleed: Double = 0
@@ -141,7 +141,7 @@ struct Marked: View {
                     .frame(width: NotchGeometry.pillSize.width, height: NotchGeometry.pillSize.height)
                     .padding(.top, 37 + NotchGeometry.pillGap)
             }
-            Caption("Dynamic Island: a 200 × 32 pill 6 pt under the camera island.\nFolded, nothing is filled; the glow alone traces it")
+            Caption("Dynamic Island: a 200 × 32 pill 6 pt under the camera island.\nFolded, nothing is filled; the glow alone shows it")
         }
         VStack(spacing: 8) {
             Desktop(menuBar: 24, width: w, height: h) {
@@ -224,7 +224,7 @@ struct Marked: View {
                 Desktop(menuBar: notch.height, width: cell.width, height: cell.height) {
                     Floating(size: g.expandedSize).padding(.top, 20)
                 }
-                Caption("Floating: frosted all over under a 42 % black tint, a 14 % white border,\n26 pt corners and the soft shadow")
+                Caption("Floating: frosted all over under a 42 % black tint,\n26 pt corners and the soft shadow (no border)")
             }
         }
     }

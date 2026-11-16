@@ -97,7 +97,7 @@ public struct NotchBackdrop: View {
     let rendering: Rendering
     let height: Double
     let expandedHeight: Double
-    /// Floating: frosted all over, the overlay's lower black with no band, and a subtle border.
+    /// Floating: frosted all over, the overlay's lower black with no band, and the configured border when it has any opacity.
     var floating: Bool
     /// How far the notch's black has bled in from the top edge (0…1, `NotchDockMotion.bleed`), and the snap's morph
     /// (0 at a flip of the placement, 1 settled), both animated by the caller.
@@ -130,7 +130,7 @@ public struct NotchBackdrop: View {
             }
         }
         .clipShape(shape)
-        .overlay { if floating { shape.stroke(appearance.floating.border.color, lineWidth: 1) } }
+        .overlay { if floating, appearance.floating.border.a > 0 { shape.stroke(appearance.floating.border.color, lineWidth: 1) } }
         .allowsHitTesting(false)
         .accessibilityHidden(true)
     }

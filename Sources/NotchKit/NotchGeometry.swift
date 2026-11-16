@@ -17,7 +17,8 @@ public struct NotchGeometry: Equatable, Sendable {
     public var expandedSize: CGSize
     /// notch.w + 260, 200.
     public var idleSize: CGSize
-    /// The expanded island plus room for the glow and the spring's overshoot: + 104 wide, + 52 tall (below the pill's gap).
+    /// The expanded island plus room for the glow and the spring's overshoot: `sideMargin` each side, `bottomMargin` below
+    /// (+ 120 wide, + 94 tall, below the pill's gap).
     public var panelSize: CGSize
     /// The folded island: the notch rect, the pill (never filled), or `.zero` on a plain display (nothing drawn).
     public var collapsedRect: CGRect
@@ -41,8 +42,19 @@ public struct NotchGeometry: Equatable, Sendable {
     public static let extraWidth: Double = 260, extraHeight: Double = 250, idleHeight: Double = 200
     /// A touch display's ears are this much wider each, for touch-sized hit areas.
     public static let touchEarExtra: Double = 26
-    /// The glow's backlight outset, its blur and the spring's overshoot: the panel's margin round the expanded island.
-    public static let outset: Double = 8, blur: Double = 24, overshoot: Double = 20
+    /// The spring's overshoot below the expanded island.
+    public static let overshoot: Double = 20
+    /// 0.1's backlight outset and blur, which set its 52 pt panel margin. Kept for source compatibility; the margins are now
+    /// `sideMargin` and `bottomMargin`.
+    public static let outset: Double = 8, blur: Double = 24
+    /// The panel's room beside the expanded island: the glow's light past a folded pill at the island's side (a floating
+    /// island near a screen edge), the farthest it reaches sideways (60 pt).
+    public static let sideMargin: Double = Double(max(NotchGlow.reach(pill: true, expansion: 0, islandHeight: NotchFloat.pillSize.height).side,
+                                                       NotchGlow.reach(pill: false, expansion: 1, islandHeight: 300).side))
+    /// The panel's room below the expanded island: the expanded glow's light plus the spring's overshoot, or a folded pill's
+    /// light at the island's bottom (a floating island pinned to the screen's bottom), whichever is more (94 pt).
+    public static let bottomMargin: Double = max(Double(NotchGlow.reach(pill: false, expansion: 1, islandHeight: 300).below) + overshoot,
+                                                 Double(NotchGlow.reach(pill: true, expansion: 0, islandHeight: NotchFloat.pillSize.height).below))
     public static let plainNotchWidth: Double = 200, stripHeight: Double = 1, stripHoverBelow: Double = 6
     /// The menu bar's height at least: a hidden menu bar (auto-hide, a full-screen Space, a secondary display without
     /// one) reads 0, which would leave a virtual notch no band and put a Dynamic Island display's pill over Apple's island.
@@ -92,10 +104,9 @@ public struct NotchGeometry: Equatable, Sendable {
         }
         let islandTop = kind == .dynamicIsland ? pillGap : 0
         let expanded = CGSize(width: size.width + extraWidth + (touch ? 2 * touchEarExtra : 0), height: size.height + extraHeight)
-        let margin = outset + blur + overshoot
         var g = NotchGeometry(notch: size, hasHardwareNotch: kind == .notch, expandedSize: expanded,
                               idleSize: CGSize(width: expanded.width, height: idleHeight),
-                              panelSize: CGSize(width: expanded.width + 2 * margin, height: islandTop + expanded.height + margin),
+                              panelSize: CGSize(width: expanded.width + 2 * sideMargin, height: islandTop + expanded.height + bottomMargin),
                               collapsedRect: .zero, hoverTarget: .zero, kind: kind, touch: touch, position: position,
                               panelTop: kind == .dynamicIsland ? bar : 0, islandTop: islandTop)
         if kind == .plain {

@@ -106,7 +106,7 @@ import Testing
     @Test func theDefaultsAreTheShippedLook() {
         let a = NotchConfiguration().appearance
         #expect(a.fill == NotchColor(hex: 0x000000) && a.frost.tint == NotchColor(r: 18 / 255, g: 18 / 255, b: 20 / 255, a: 0.12))
-        #expect(a.floating.overlay == 0.42 && a.floating.border == NotchColor(r: 1, g: 1, b: 1, a: 0.14))
+        #expect(a.floating.overlay == 0.42 && a.floating.border == NotchColor(r: 1, g: 1, b: 1, a: 0))
         #expect(a.floating.shadow == NotchShadow(color: NotchColor(r: 0, g: 0, b: 0, a: 0.16), radius: 8, x: 0, y: 6))
         #expect(a.handle.lineRest.a == 0.28 && a.handle.lineHover.a == 0.70 && a.handle.gripRest.a == 0.35 && a.handle.gripHover.a == 0.85)
         #expect(a.glow.start == NotchColor(hex: 0xD9704F) && a.glow.end == NotchColor(hex: 0xF2B65A) && a.glow.offOutline == 0.85)
