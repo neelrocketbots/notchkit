@@ -38,7 +38,7 @@ Every size comes from the notch:
 | Folded | The notch rect exactly. Its 9 pt bottom corners sit inside the hardware's own. |
 | Expanded | (notch width + 260) × (notch height + 250). A touch display adds 26 pt each side. |
 | Idle | (notch width + 260) × 200. |
-| Panel | The expanded island plus 52 pt (glow outset 8 + blur 24 + overshoot 20) on each side and below it. `panelSize(growth:)` adds the client's growth. |
+| Panel | The expanded island plus `sideMargin` (60 pt) on each side and `bottomMargin` (94 pt) below it: room for the glow's light (see Glow) and the spring's 20 pt overshoot. `panelSize(growth:)` adds the client's growth. Floating, `NotchFloat.margin` (60 pt) is added above the island too. |
 | Header band | The notch's height. |
 | Body | Inset 12 pt from the island's outer edge, from 2 pt below the band to 8 pt above the bottom (`bodyRect`). |
 
@@ -143,14 +143,14 @@ A floating island dragged toward the notch takes in the notch's black from its t
 
 ![The glow on the expanded notch island, the folded notch and a plain display's strip](images/glow-shapes.png)
 
-![The demo's glow sweeping once round the island](images/demo-sweep.gif)
-
-- **What it draws.** A 2.6 pt gradient trace (start → end → start) along the outline, outside the island's edge. Behind it, the island's own shape is blurred as a backlight.
-- **Backlight.** Expanded: 8 pt out, 24 pt blur. Folded: 10 pt out, 32 pt blur, a little wider and softer. In between it interpolates with the expansion. Its opacity is 30 %, and 35 % while turning.
-- **States.** Off draws nothing. Turning goes round once every 6 s, redrawn at 30 fps. A sweep runs once round in 1.6 s, redrawn at 60 fps, and each new serial restarts it. A sweep that starts during a turn carries on from the turn's angle. When its state ends, the glow fades out over 200 ms.
-- **Shape.** The glow follows the notch island's edge, a plain display's folded 1 pt strip, or the pill: on a Dynamic Island display, or floating (`NotchGlowShape.of(_:expansion:)`).
-- **Glow turned off.** If the client turns the glow off, a plain white outline (85 %) is drawn for the same moments.
-- **Reduce Motion.** No turning, and a sweep shows still at full.
+- **What it draws.** Light, not a line: an ellipse in the gradient (start → end, leading to trailing) behind the island, blurred 24 pt (`NotchGlowEllipse`). The ellipse and its blur are rasterised once into one bitmap (`drawingGroup`). Only its opacity animates, so a fade reuses the bitmap; it is redrawn only while the island's size changes. There is no timeline. The caller fills the island over it, or masks the island's shape out of a translucent body. A pill's or a strip's inside is cut out by the view, since nothing fills it.
+- **Where** (`NotchGlow.ellipseRect`). Expanded: inset 32 pt from the island's sides, its bottom 14 pt below the island's, at most 260 pt tall, its top at least 60 pt below the island's top (so no light shows above it). Folded at a notch or a strip: 40 pt wider than the island, 80 pt tall, its bottom 32 pt below the island's. Folded as a pill: as wide as the pill, 50 pt tall, its bottom 20 pt below. In between it interpolates with the expansion.
+- **Reach.** The blurred light is gone 60 pt past the ellipse's edge (`blurReach`, 2.5 blur radii). The drawing keeps `ellipseRoom` (92 pt) round the island, and the panel margins come from the reach (`NotchGlow.reach`), so a panel's edge never cuts the light into a hard line. One exception is the client's own: where a floating panel's top margin is cut short (for example to stay out of the menu bar), the light above the island is clipped there.
+- **States** (`NotchGlow.motion`). Off draws nothing, and once its fade has run the ellipse leaves the view tree. Turning eases to 50 % over 0.6 s and holds still. A sweep flashes: up to 75 % expanded and 90 % folded over the first 30 % of `glowSweep` (0.48 s of 1.6 s), then out over the rest. Each new serial starts a new flash. With `alarm: true` each sweep peaks at 90 %; a client sends a new serial for each beat (nothing repeats by itself). When the state ends the light fades out over 0.6 s.
+- **Trace (opt-in).** `trace: true` adds a 2.6 pt gradient trace (start → end → start) along the outline, outside the island's edge, still and at full while the glow is lit. It suits Increase Contrast, where a soft light alone is a weak signal. A calibration run (`NotchConfiguration.Debug.glowCalibration`) lights the glow steadily with the trace.
+- **Shape.** The glow follows the notch island, a plain display's folded 1 pt strip, or the pill: on a Dynamic Island display, or floating (`NotchGlowShape.of(_:expansion:)`).
+- **Glow turned off.** `on: false` draws nothing at all, at any moment.
+- **Reduce Motion.** Held still for as long as the state lasts (50 %, an alarm 90 %), with 0.2 s cross-fades.
 - **When to glow.** NotchKit has no hover or scroll input for this. The client decides.
 
 ## Frosted backdrop (`NotchBackdrop`)
