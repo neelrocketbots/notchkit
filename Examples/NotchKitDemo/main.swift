@@ -12,7 +12,7 @@ import SwiftUI
 // screen points) so a recorder can frame it.
 
 /// The panel's margin round the island on every side: room for the glow, the shadow and the snap's overshoot.
-let margin = NotchGeometry.outset + NotchGeometry.blur + NotchGeometry.overshoot
+let margin = max(NotchGeometry.sideMargin, NotchGeometry.bottomMargin, NotchFloat.margin)
 
 /// The demo's model: the island's geometry, placement, snap state and the panel it drives. It is the handles' driver.
 @MainActor @Observable final class DemoIsland: NotchHandleDriver {
@@ -228,7 +228,7 @@ let margin = NotchGeometry.outset + NotchGeometry.blur + NotchGeometry.overshoot
     }
 }
 
-/// The island: frost, border and shadow, the glow behind, a header that drags, the grip, the resize line. Docked it is
+/// The island: frost and shadow, the glow behind, a header that drags, the grip, the resize line. Docked it is
 /// the notch's shape; floating, the card; the snap morphs between them.
 struct DemoIslandView: View {
     let island: DemoIsland

@@ -47,8 +47,8 @@ import Testing
         #expect(abs(short.height - 1.06) < 1e-9, "a short island: the full 6 %")
         let tall = NotchDockMotion.scale(stretch: 1, height: 600)
         #expect(abs((tall.height - 1) * 600 - NotchDockMotion.maxStretchPoints) < 1e-9, "a tall one: 12 pt, not 36")
-        #expect(NotchDockMotion.maxStretchPoints < NotchGeometry.outset + NotchGeometry.blur + NotchGeometry.overshoot - NotchGeometry.outset,
-                "inside the panel's bottom margin, less the glow's own room")
+        #expect(NotchDockMotion.maxStretchPoints < NotchGeometry.overshoot,
+                "inside the panel's bottom margin, less the glow's own room (its light's reach)")
         let over = NotchDockMotion.scale(stretch: -0.5, height: 600)
         #expect(over.height < 1 && over.height > 0.98, "the overshoot's squash scales the same way")
     }

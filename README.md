@@ -15,8 +15,8 @@ NotchKit draws and measures the island. Your app decides what goes inside it and
 - **Dock, float, drag and resize maths.** `NotchFloat` covers placement, clamping to the visible rect, cross-display lookup, the dock test and the VoiceOver corners. `NotchResize` covers the rubber band, Dock clearance and the VoiceOver step. `NotchLayoutPrefs` keeps the height and floating position per display, with tolerant decoding. `NotchHitRect` gives edge-inclusive hit tests.
 - **Snap motion.** `NotchDockMotion` is a squash-and-stretch snap between docked and floating. It has the pull and push stretch and the spring.
 - **Notch bleed.** A floating island dragged toward the notch takes in the notch's black from its top edge (`NotchDockMotion.bleed`, `ink`). `NotchBackdrop.overlayStops(…bleed:morph:)` draws it.
-- **Glow.** `NotchGlowView` draws a gradient trace along the island's outline, with a blurred backlight. It can be off, turning (a lookup in progress) or sweeping (one pass for an event). It follows the notch, a plain display's strip or the pill, and has a Reduce Motion behaviour.
-- **Frosted backdrop.** `NotchBackdrop` draws a dark material under a black overlay, so the notch band stays black. It draws solid under Reduce Transparency and Increase Contrast. Floating, it adds a frost tint, a border and `NotchFloatShadow`.
+- **Glow.** `NotchGlowView` is light, not a line: a blurred gradient ellipse behind the island, rasterised once, whose opacity alone animates. It can be off, turning (a lookup in progress: held still), or sweeping (a flash up and out for an event; an alarm flashes brighter). It sits under the notch, a plain display's strip or the pill, holds still under Reduce Motion, and can add a crisp gradient trace along the outline (`trace: true`, for example under Increase Contrast).
+- **Frosted backdrop.** `NotchBackdrop` draws a dark material under a black overlay, so the notch band stays black. It draws solid under Reduce Transparency and Increase Contrast. Floating, it adds a frost tint and `NotchFloatShadow` (and a border, if you give one some opacity).
 - **Grip and handles.** `NotchResizeHandle` is the bottom grab line. `NotchMoveGesture` and `NotchMoveArea` drag the island. `NotchGripDots` draws the ::: grip. The grip has VoiceOver actions: Dock and the four corners. All of them drive your model through `NotchHandleDriver`.
 - **Configuration.** `NotchConfiguration`, read from the SwiftUI environment, sets colours, frost material and overlay, the floating look, handle inks, glow gradient and timing, accessibility strings and an optional glow calibration. The defaults reproduce the shipped look.
 
@@ -35,7 +35,7 @@ NotchKit reads no environment variables and no `UserDefaults`, and logs nothing.
 ```swift
 // Package.swift
 dependencies: [
-    .package(url: "https://github.com/neelrocketbots/notchkit.git", from: "0.1.0"),
+    .package(url: "https://github.com/neelrocketbots/notchkit.git", from: "0.2.0"),
 ],
 targets: [
     .target(name: "MyApp", dependencies: [.product(name: "NotchKit", package: "notchkit")]),
@@ -69,7 +69,8 @@ struct FloatingIsland: View {
             }
             .clipShape(shape)
         }
-        .padding(NotchFloat.margin)            // room for the glow and the shadow
+        // room for the glow's light and the shadow
+        .padding(.top, NotchFloat.margin).padding(.horizontal, NotchGeometry.sideMargin).padding(.bottom, NotchGeometry.bottomMargin)
         // .environment(\.notchConfiguration, myConfiguration)   // optional: your colours and strings
     }
 }
@@ -108,7 +109,7 @@ swift test
 The tests use Swift Testing. They cover the geometry, shape, dock motion, bleed and ink, float rules, stored prefs, resize, hit rect, glow values and calibration, frost look and stops, shadow and grip. They also include the dependency source scan.
 
 The figures in `docs/images` are rendered from NotchKit's own views and values by `swift run NotchKitDocImages`. Run it after a change to the geometry or the look, and commit the new PNGs.
-The GIFs are recordings of `NotchKitDemo --snap`, `--glow sweep` and `--glow turn`, made with `screencapture -v` and ffmpeg.
+The GIF is a recording of `NotchKitDemo --snap`, made with `screencapture -v` and ffmpeg. It predates 0.2.0, so it still shows the floating border.
 
 ### Releasing
 

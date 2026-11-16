@@ -21,7 +21,7 @@ public enum NotchDockMotion {
     public static let dockReach: Double = 40
 
     /// The stretch never adds more than this many points of height, so a tall island stays inside its panel's margin below
-    /// it (52 pt, less the glow's own room).
+    /// it (`NotchGeometry.bottomMargin`, less the glow's own room: within `NotchGeometry.overshoot`).
     public static let maxStretchPoints: Double = 12
 
     /// The island's scale at a stretch (negative: the overshoot's squash). `height` is the island's drawn height: the extra

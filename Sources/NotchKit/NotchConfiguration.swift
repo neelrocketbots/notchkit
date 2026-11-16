@@ -72,13 +72,14 @@ public struct NotchConfiguration: Sendable {
         }
     }
 
-    /// The floating island: frosted all over under a black tint, a subtle border and a soft shadow.
+    /// The floating island: frosted all over under a black tint and a soft shadow. A border is drawn only when the client
+    /// gives one some opacity (none by default since 0.2.0: the island's edge is its frost and its shadow, no line).
     public struct Floating: Sendable, Equatable {
         public var overlay: Double
         public var border: NotchColor
         public var shadow: NotchShadow
 
-        public init(overlay: Double = 0.42, border: NotchColor = NotchColor(r: 1, g: 1, b: 1, a: 0.14),
+        public init(overlay: Double = 0.42, border: NotchColor = NotchColor(r: 1, g: 1, b: 1, a: 0),
                     shadow: NotchShadow = NotchShadow(color: NotchColor(r: 0, g: 0, b: 0, a: 0.16), radius: 8, x: 0, y: 6)) {
             self.overlay = overlay; self.border = border; self.shadow = shadow
         }
@@ -94,7 +95,9 @@ public struct NotchConfiguration: Sendable {
         }
     }
 
-    /// The glow's gradient (start → end → start round the island) and the plain outline's white when the glow is off.
+    /// The glow's gradient: the ellipse's start → end (leading to trailing) and the opt-in trace's start → end → start
+    /// round the island. `offOutline` was 0.1's white outline drawn while the glow was switched off; since 0.2.0 a glow
+    /// switched off draws nothing, and the field is kept for source compatibility only.
     public struct Glow: Sendable, Equatable {
         public var start: NotchColor, end: NotchColor
         public var offOutline: Double
@@ -130,7 +133,8 @@ public struct NotchConfiguration: Sendable {
         }
     }
 
-    /// The glow's timing: a sweep runs once round in `glowSweep`; a turn takes `glowTurn` seconds.
+    /// The glow's timing: a sweep's flash rises and fades out over `glowSweep` (30 % rising). `glowTurn` was 0.1's turn
+    /// of the gradient; since 0.2.0 nothing turns, and the field is kept for source compatibility only.
     public struct Motion: Sendable, Equatable {
         public var glowSweep: Duration
         public var glowTurn: Double
@@ -140,8 +144,8 @@ public struct NotchConfiguration: Sendable {
 
     /// A client's debug switches, read by the client and passed in (none by default).
     public struct Debug: Sendable {
-        /// When set, the glow is lit steadily and its folded outline is calibrated by the values this returns, read twice
-        /// a second (a by-eye match to the physical notch).
+        /// When set, the glow is lit steadily, with the trace, and the folded trace is calibrated by the values this
+        /// returns, read twice a second (a by-eye match to the physical notch).
         public var glowCalibration: (@MainActor @Sendable () -> NotchGlowCalibration)?
 
         public init(glowCalibration: (@MainActor @Sendable () -> NotchGlowCalibration)? = nil) { self.glowCalibration = glowCalibration }

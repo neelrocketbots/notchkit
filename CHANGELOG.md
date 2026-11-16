@@ -11,6 +11,30 @@ All notable changes to NotchKit. The format follows [Keep a Changelog](https://k
 
 Nothing yet.
 
+## [0.2.0] - 2026-11-16
+
+The glow is light, not a line.
+
+### Changed
+- **The glow is a blurred ellipse behind the island** (`NotchGlowEllipse`), in the configured gradient from start to end, blurred 24 pt and rasterised once. Only its opacity animates, and there is no timeline: nothing redraws per frame except while the island's size changes. `NotchGlowView` holds a turning state still at 50 %. A sweep flashes up to 75 % expanded or 90 % folded, then fades out over `glowSweep`. The ellipse leaves the view tree once nothing is lit. Reduce Motion holds it still with 0.2 s cross-fades.
+- **The trace along the outline is opt-in**: `NotchGlowView(…, trace: true)` draws it beside the light, still. A calibration run lights the glow with its trace.
+- **A glow turned off draws nothing** (`on: false`). It used to draw a white outline.
+- **Panel margins fit the light.** `NotchGeometry.panelSize` is the expanded island plus `sideMargin` (60 pt) each side and `bottomMargin` (94 pt) below; both were 52 pt. `NotchFloat.margin`, the room above a floating island, is 60 pt (was 32). `NotchGlow.drawingPadding(expansion:)` is `ellipseRoom` (92 pt) at every expansion.
+- **No floating border by default.** `NotchConfiguration.Floating.border` defaults to clear, and `NotchBackdrop` draws a border only when it has some opacity.
+
+### Added
+- `NotchGlowView(state:shape:on:reduceMotion:expansion:trace:alarm:topRoom:)`: `trace`, `alarm` (each sweep peaks at 90 %) and `topRoom` (the light fades out toward a window top that is not the screen's edge).
+- `View.notchGlowTopFade(room:)`, that fade on its own.
+- `NotchGlowEllipse`, the still light, for a client that animates it itself or renders it.
+- `NotchGlow.ellipseRect(island:shape:expansion:)`, `ellipseBlur`, `blurReach`, `ellipseRoom`, `reach(pill:expansion:islandHeight:)` and the ellipse's sizes; `NotchGlow.motion(for:on:reduceMotion:alarm:sweep:)` with `NotchGlowMotion` and `NotchGlowLevel`, the levels and fades.
+- `NotchGeometry.sideMargin` and `bottomMargin`.
+
+### Deprecated
+- 0.1's backlight and turning trace: `NotchGlow.haloBlur`, `haloOutset`, `foldedHaloBlur`, `foldedHaloOutset`, `haloBlur(expansion:)`, `haloOutset(expansion:)`, `haloOpacity(turning:)`, `appearance(for:on:reduceMotion:)`, `sweepAngle`, `frameInterval(for:)`, `turnAngle(at:turn:)` and `NotchGlowAppearance`. `NotchConfiguration.Glow.offOutline` and `Motion.glowTurn` are no longer read. `NotchGeometry.outset` and `blur` no longer set the margins.
+
+### Removed
+- The glow's turn and sweep GIFs from the docs (they showed 0.1's trace). The figures in `docs/images` are rendered again.
+
 ## [0.1.0] - 2026-11-09
 
 The first tagged version: the displays, the pure maths and the look, extracted from the app NotchKit was built in.
@@ -41,5 +65,6 @@ The first tagged version: the displays, the pure maths and the look, extracted f
 - **Configuration.** `NotchConfiguration` covers appearance, strings, motion and debug, read from the environment. Its defaults are the shipped look.
 - **Source scan.** It checks that NotchKit imports only Apple's frameworks and reads no environment variables or defaults.
 
-[Unreleased]: https://github.com/neelrocketbots/notchkit/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/neelrocketbots/notchkit/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/neelrocketbots/notchkit/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/neelrocketbots/notchkit/releases/tag/v0.1.0

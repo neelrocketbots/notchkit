@@ -10,13 +10,13 @@ import Testing
         let g = NotchGeometry.make(notch: Notch(width: 220, height: 38), builtInNotchWidth: 220, menuBarHeight: 24)
         #expect(g.hasHardwareNotch && g.notch == CGSize(width: 220, height: 38))
         #expect(g.expandedSize == CGSize(width: 480, height: 288) && g.idleSize == CGSize(width: 480, height: 200))
-        #expect(g.panelSize == CGSize(width: 584, height: 340))
-        #expect(g.collapsedRect == CGRect(x: (584 - 220) / 2, y: 0, width: 220, height: 38) && g.hoverTarget == g.collapsedRect)
+        #expect(g.panelSize == CGSize(width: 600, height: 382), "+ 60 each side for the glow, + 94 below for its light and the spring's overshoot")
+        #expect(g.collapsedRect == CGRect(x: (600 - 220) / 2, y: 0, width: 220, height: 38) && g.hoverTarget == g.collapsedRect)
         #expect(NotchGeometry.cornerRadius(expansion: 0) == 9 && NotchGeometry.cornerRadius(expansion: 1) == 26 && NotchGeometry.cornerRadius(expansion: 0.5) == 17.5)
         #expect(NotchGeometry.shoulder(expansion: 0) == 0 && NotchGeometry.shoulder(expansion: 1) == 12, "Folded is the notch, no flare")
         let thirteen = NotchGeometry.make(notch: Notch(width: 200, height: 32), builtInNotchWidth: 200, menuBarHeight: 24)
         #expect(thirteen.expandedSize == CGSize(width: 460, height: 282) && thirteen.expandedSize.height / 956 < 0.3, "within the top 30% of the 13.6\" Air's 956 pt")
-        #expect(g.bodyRect == CGRect(x: 52 + 12, y: 38 + 2, width: 480 - 24, height: 288 - 38 - 2 - 8), "the body: inset 12 from the island's edge, 2 under the band, 8 above the bottom, in panel coordinates")
+        #expect(g.bodyRect == CGRect(x: 60 + 12, y: 38 + 2, width: 480 - 24, height: 288 - 38 - 2 - 8), "the body: inset 12 from the island's edge, 2 under the band, 8 above the bottom, in panel coordinates")
         #expect(NotchGeometry.fallback == NotchGeometry.make(notch: nil, builtInNotchWidth: 0, menuBarHeight: 24))
     }
 
@@ -45,9 +45,9 @@ import Testing
         #expect(g.kind == .dynamicIsland && !g.hasHardwareNotch && g.touch && g.position == .centre, "Centre is the default")
         #expect(g.notch == CGSize(width: 200, height: 32) && g.expandedSize == CGSize(width: 460 + 52, height: 282))
         #expect(g.panelTop == 37 && g.islandTop == 6, "the panel starts at the menu bar's bottom edge, the pill 6 pt below it")
-        #expect(g.panelSize == CGSize(width: 616, height: 6 + 282 + 52))
-        #expect(g.collapsedRect == CGRect(x: (616 - 200) / 2, y: 6, width: 200, height: 32) && g.hoverTarget == g.collapsedRect, "the folded pill, never filled, is the target")
-        #expect(g.bodyRect == CGRect(x: 52 + 12, y: 6 + 32 + 2, width: 512 - 24, height: 282 - 32 - 2 - 8))
+        #expect(g.panelSize == CGSize(width: 632, height: 6 + 282 + 94))
+        #expect(g.collapsedRect == CGRect(x: (632 - 200) / 2, y: 6, width: 200, height: 32) && g.hoverTarget == g.collapsedRect, "the folded pill, never filled, is the target")
+        #expect(g.bodyRect == CGRect(x: 60 + 12, y: 6 + 32 + 2, width: 512 - 24, height: 282 - 32 - 2 - 8))
         #expect(NotchGeometry.pillSize == CGSize(width: 200, height: 32) && NotchGeometry.pillGap == 6)
         #expect(NotchGeometry.pillCornerRadius(expansion: 0) == 16 && NotchGeometry.pillCornerRadius(expansion: 1) == 26, "a capsule folded, the notch island's 26 pt expanded")
         let notched = NotchGeometry.make(notch: Notch(width: 220, height: 38), builtInNotchWidth: 220, menuBarHeight: 38)
@@ -60,14 +60,14 @@ import Testing
     @Test func thePillDocksCentreLeftOrRight() {
         #expect(NotchDockPosition.allCases == [.centre, .left, .right] && NotchGeometry.dockInset == 12)
         let centre = NotchGeometry.make(notch: nil, builtInNotchWidth: 0, menuBarHeight: 37, dynamicIsland: true, position: .centre)
-        #expect(centre.collapsedRect.midX == 564 / 2 && centre.islandRect(size: centre.expandedSize) == CGRect(x: 52, y: 6, width: 460, height: 282))
+        #expect(centre.collapsedRect.midX == 580 / 2 && centre.islandRect(size: centre.expandedSize) == CGRect(x: 60, y: 6, width: 460, height: 282))
         let left = NotchGeometry.make(notch: nil, builtInNotchWidth: 0, menuBarHeight: 37, dynamicIsland: true, position: .left)
         #expect(left.collapsedRect == CGRect(x: 12, y: 6, width: 200, height: 32) && left.hoverTarget == left.collapsedRect)
         #expect(left.islandRect(size: left.expandedSize) == CGRect(x: 12, y: 6, width: 460, height: 282) && left.bodyRect.minX == 12 + 12, "it grows right and down from the pill's corner")
         let right = NotchGeometry.make(notch: nil, builtInNotchWidth: 0, menuBarHeight: 37, dynamicIsland: true, position: .right)
-        #expect(right.collapsedRect == CGRect(x: 564 - 12 - 200, y: 6, width: 200, height: 32))
-        #expect(right.islandRect(size: right.expandedSize) == CGRect(x: 564 - 12 - 460, y: 6, width: 460, height: 282), "it grows left and down")
-        #expect(NotchGeometry.make(notch: Notch(width: 220, height: 38), builtInNotchWidth: 220, menuBarHeight: 38, position: .left).collapsedRect.midX == CGFloat(584) / 2, "Position is the Dynamic Island display's alone")
+        #expect(right.collapsedRect == CGRect(x: 580 - 12 - 200, y: 6, width: 200, height: 32))
+        #expect(right.islandRect(size: right.expandedSize) == CGRect(x: 580 - 12 - 460, y: 6, width: 460, height: 282), "it grows left and down")
+        #expect(NotchGeometry.make(notch: Notch(width: 220, height: 38), builtInNotchWidth: 220, menuBarHeight: 38, position: .left).collapsedRect.midX == CGFloat(600) / 2, "Position is the Dynamic Island display's alone")
     }
 
 
