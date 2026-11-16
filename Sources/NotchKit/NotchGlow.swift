@@ -260,6 +260,9 @@ public struct NotchGlowEllipse: View {
 /// - `trace`: the 2.6 pt gradient trace along the outline as well, still, while the glow is lit (for example under
 ///   Increase Contrast).
 /// - `alarm`: each sweep peaks at 90 %.
+/// - `topRoom`: the room above the frame inside the host's window, when its top is not the screen's edge (a floating
+///   panel kept out of the menu bar, a panel under the menu bar). Under `blurReach` the light fades out toward that top,
+///   so the window's edge never cuts it into a line (`notchGlowTopFade(room:)`).
 /// - Reduce Motion: held still with 0.2 s cross-fades.
 ///
 /// There is no timeline: nothing redraws per frame except while the island's size changes. When nothing is lit the
@@ -274,6 +277,8 @@ public struct NotchGlowView: View {
     let expansion: Double
     let trace: Bool
     let alarm: Bool
+    /// The room above the frame's top inside the host's window (nil: the frame's top is the screen's edge).
+    let topRoom: CGFloat?
     /// The light's opacity now (animated) and whether it is in the view tree.
     @State private var level: NotchGlowLevel
     @State private var present: Bool
@@ -284,9 +289,9 @@ public struct NotchGlowView: View {
     @Environment(\.notchConfiguration) private var configuration
 
     public init(state: NotchGlowState, shape: NotchGlowShape, on: Bool, reduceMotion: Bool, expansion: Double = 1,
-                trace: Bool = false, alarm: Bool = false) {
+                trace: Bool = false, alarm: Bool = false, topRoom: CGFloat? = nil) {
         self.state = state; self.shape = shape; self.on = on; self.reduceMotion = reduceMotion; self.expansion = expansion
-        self.trace = trace; self.alarm = alarm
+        self.trace = trace; self.alarm = alarm; self.topRoom = topRoom
         // A still state shows from the first frame; a flash starts from nothing and rises once the view is up.
         let motion = NotchGlow.motion(for: state, on: on, reduceMotion: reduceMotion, alarm: alarm)
         if case .hold(let l, _) = motion { _level = State(initialValue: l) } else { _level = State(initialValue: .zero) }
@@ -309,8 +314,10 @@ public struct NotchGlowView: View {
             drawing(light: present, still: nil, trace: trace && present)
                 .onChange(of: Key(state: state, reduceMotion: reduceMotion, alarm: alarm), initial: true) { _, key in
                     run(NotchGlow.motion(for: key.state, on: true, reduceMotion: key.reduceMotion, alarm: key.alarm,
-                                         sweep: configuration.motion.glowSweep))
+                                         sweep: configuration.motion.glowSweep), alarm: key.alarm)
                 }
+                // Switched off: nothing is kept, so switching back on starts from the state then, not a stale level.
+                .onDisappear { token += 1; present = false; level = .zero; traceLit = false }
         }
     }
 
@@ -320,10 +327,11 @@ public struct NotchGlowView: View {
         return view
     }
 
-    /// Animates the light (and the trace) to a motion. A flash rises, then, unless another motion took over, fades out;
-    /// once nothing is lit and the fade has run, the ellipse leaves the view tree. Inserted under the motion's animation,
-    /// the ellipse rises from nothing (its `.opacity` transition), whatever level it is inserted at.
-    private func run(_ motion: NotchGlowMotion) {
+    /// Animates the light (and the trace) to a motion. A flash rises, then, unless another motion took over, fades out
+    /// and leaves the view tree (an alarm's keeps its trace lit between beats); once nothing is lit and the fade has run,
+    /// the ellipse leaves the view tree. Inserted under the motion's animation, the ellipse rises from nothing (its
+    /// `.opacity` transition: an inserted modifier has no earlier value to animate from, so its level shows at once).
+    private func run(_ motion: NotchGlowMotion, alarm: Bool) {
         token += 1
         let mine = token
         switch motion {
@@ -338,7 +346,12 @@ public struct NotchGlowView: View {
         case .flash(let peak, let rise, let fall):
             withAnimation(.easeInOut(duration: rise)) { present = true; level = peak; traceLit = true } completion: {
                 guard token == mine else { return }
-                withAnimation(.easeInOut(duration: fall)) { level = .zero }
+                withAnimation(.easeInOut(duration: fall)) {
+                    level = .zero
+                    if !alarm { traceLit = false }
+                } completion: {
+                    if token == mine, !alarm { present = false }
+                }
             }
         }
     }
@@ -356,6 +369,7 @@ public struct NotchGlowView: View {
                 traceView.opacity(still != nil || traceLit ? 1 : 0)
             }
         }
+        .notchGlowTopFade(room: topRoom)
         .allowsHitTesting(false)
         .accessibilityHidden(true)
         if case .notch = shape {
@@ -387,6 +401,27 @@ public struct NotchGlowView: View {
             .padding(NotchGlow.traceRoom)
             .drawingGroup()
             .padding(-NotchGlow.traceRoom)
+    }
+}
+
+extension View {
+    /// Fades the glow's light out toward a window's top edge `room` points above this view's frame, so the edge never
+    /// cuts the light into a line: clear at that edge, full `NotchGlow.blurReach` below it. Nil, or room enough for the
+    /// light (at least `blurReach`): unchanged. For a glow whose host's top is not the screen's edge.
+    @ViewBuilder public func notchGlowTopFade(room: CGFloat?) -> some View {
+        if let room, room < NotchGlow.blurReach {
+            let pad = NotchGlow.ellipseRoom
+            mask {
+                VStack(spacing: 0) {
+                    LinearGradient(colors: [.clear, .black], startPoint: .top, endPoint: .bottom).frame(height: NotchGlow.blurReach)
+                    Rectangle()
+                }
+                .padding(.top, -max(0, room))
+                .padding([.leading, .trailing, .bottom], -pad)
+            }
+        } else {
+            self
+        }
     }
 }
 

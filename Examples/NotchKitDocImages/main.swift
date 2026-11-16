@@ -67,6 +67,14 @@ struct Docked: View {
         ZStack {
             NotchGlowView(state: glow, shape: .notch(shoulder: shape.shoulder, bottomRadius: shape.bottomRadius), on: true,
                           reduceMotion: true, expansion: e)
+                // A translucent body would show the light through it: cut the island's shape out of the glow.
+                .mask {
+                    ZStack {
+                        Rectangle().padding(-NotchGlow.drawingPadding(expansion: e))
+                        if rendering != .solid { shape.blendMode(.destinationOut) }
+                    }
+                    .compositingGroup()
+                }
             NotchBackdrop(shape: AnyShape(shape), rendering: rendering, height: size.height, expandedHeight: g.expandedSize.height)
         }
         .frame(width: size.width, height: size.height)
@@ -260,24 +268,24 @@ struct Marked: View {
     .background(.black)
 }
 
-/// Where the glow goes: the notch island's edge, a plain display's strip, the pill.
+/// Where the glow's light goes: under the expanded island, round the folded notch, under a plain display's strip.
 @MainActor func glowShapes() -> some View {
     let w = 520.0, h = 330.0
     return HStack(alignment: .top, spacing: 16) {
         VStack(spacing: 8) {
             Desktop(menuBar: notch.height, width: w, height: h) { Docked(geometry: notched, expansion: 1, rendering: .tint, glow: .sweep(serial: 1)) }
-            Caption("Notch: a 2.6 pt trace outside the island's edge, the shape blurred behind it as a backlight")
+            Caption("Expanded: blurred light under the island, cut out of the frosted body")
         }
         VStack(spacing: 8) {
             Desktop(menuBar: notch.height, width: w, height: h) { Docked(geometry: notched, expansion: 0, glow: .sweep(serial: 1)) }
-            Caption("Folded: no shoulders, so the trace follows the hardware notch")
+            Caption("Folded: a pool of light round and under the notch")
         }
         VStack(spacing: 8) {
             Desktop(menuBar: 24, width: w, height: h) {
                 NotchGlowView(state: .sweep(serial: 1), shape: .strip, on: true, reduceMotion: true, expansion: 0)
                     .frame(width: plain.notch.width, height: NotchGeometry.stripHeight)
             }
-            Caption("Plain display folded: the 1 pt strip at the top centre, nothing filled")
+            Caption("Plain display folded: light under the 1 pt strip, nothing filled")
         }
     }
     .padding(16)

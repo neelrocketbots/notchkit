@@ -23,7 +23,8 @@ The glow is light, not a line.
 - **No floating border by default.** `NotchConfiguration.Floating.border` defaults to clear, and `NotchBackdrop` draws a border only when it has some opacity.
 
 ### Added
-- `NotchGlowView(state:shape:on:reduceMotion:expansion:trace:alarm:)`: `trace` and `alarm` (each sweep peaks at 90 %).
+- `NotchGlowView(state:shape:on:reduceMotion:expansion:trace:alarm:topRoom:)`: `trace`, `alarm` (each sweep peaks at 90 %) and `topRoom` (the light fades out toward a window top that is not the screen's edge).
+- `View.notchGlowTopFade(room:)`, that fade on its own.
 - `NotchGlowEllipse`, the still light, for a client that animates it itself or renders it.
 - `NotchGlow.ellipseRect(island:shape:expansion:)`, `ellipseBlur`, `blurReach`, `ellipseRoom`, `reach(pill:expansion:islandHeight:)` and the ellipse's sizes; `NotchGlow.motion(for:on:reduceMotion:alarm:sweep:)` with `NotchGlowMotion` and `NotchGlowLevel`, the levels and fades.
 - `NotchGeometry.sideMargin` and `bottomMargin`.
@@ -32,7 +33,7 @@ The glow is light, not a line.
 - 0.1's backlight and turning trace: `NotchGlow.haloBlur`, `haloOutset`, `foldedHaloBlur`, `foldedHaloOutset`, `haloBlur(expansion:)`, `haloOutset(expansion:)`, `haloOpacity(turning:)`, `appearance(for:on:reduceMotion:)`, `sweepAngle`, `frameInterval(for:)`, `turnAngle(at:turn:)` and `NotchGlowAppearance`. `NotchConfiguration.Glow.offOutline` and `Motion.glowTurn` are no longer read. `NotchGeometry.outset` and `blur` no longer set the margins.
 
 ### Removed
-- The glow's turn and sweep GIFs from the docs (they showed 0.1's trace).
+- The glow's turn and sweep GIFs from the docs (they showed 0.1's trace). The figures in `docs/images` are rendered again.
 
 ## [0.1.0] - 2026-11-09
 

@@ -138,6 +138,8 @@ import Testing
                 let l = light(island, .of(g, expansion: 1), 1)
                 #expect(l.minX >= panel.minX && l.maxX <= panel.maxX && l.maxY <= panel.maxY, "docked \(g.kind), growth \(growth), overshoot \(overshoot): \(l) in \(panel)")
             }
+            // (A Dynamic Island display's panel top is the menu bar's bottom, 6 pt above the pill: there the client fades the
+            // light toward it, `aDynamicIslandPanelFadesTheLightUnderTheMenuBar`.)
             let folded = light(g.collapsedRect.isEmpty ? NotchGlowShape.stripRect(g) : g.collapsedRect, .of(g, expansion: 0), 0)
             #expect(folded.minX >= 0 && folded.maxX <= panel.maxX && folded.maxY <= panel.maxY, "docked folded \(g.kind): \(folded)")
 
@@ -229,10 +231,11 @@ import Testing
     }
 
     /// The light at the glow's highest peak (90 %), placed at `island` in a panel `panel` big.
-    @MainActor static func peak(_ island: CGRect, _ shape: NotchGlowShape, expansion: Double, panel: CGSize) -> some View {
+    @MainActor static func peak(_ island: CGRect, _ shape: NotchGlowShape, expansion: Double, panel: CGSize, topRoom: CGFloat? = nil) -> some View {
         NotchGlowEllipse(shape: shape, expansion: expansion)
             .opacity(NotchGlow.alarmPeak.folded)
             .frame(width: island.width, height: island.height)
+            .notchGlowTopFade(room: topRoom)
             .padding(.leading, island.minX).padding(.top, island.minY)
             .frame(width: panel.width, height: panel.height, alignment: .topLeading)
     }
@@ -273,6 +276,31 @@ import Testing
             let pill = try Self.render(Self.peak(f.collapsedRect, .of(f, expansion: 0), expansion: 0, panel: fp), size: fp)
             #expect(pill.edgeAlpha(top: true) == 0, "floating pill at \(offset), growth \(growth): \(pill.edgeAlpha(top: true))")
         }
+    }
+
+    /// Where the window's top is not the screen's edge and the room above the island is short (a floating panel kept out
+    /// of the menu bar: 16 pt at a VoiceOver corner, 0 after a drag to the top; a Dynamic Island display's panel, 6 pt
+    /// under the menu bar), `notchGlowTopFade` fades the light out toward that top: the top row stays clear at the peak,
+    /// and the light under the island still shows.
+    @MainActor @Test(arguments: [0.0, 16, 59])
+    func aShortTopFadesTheLightOut(topMargin: Double) throws {
+        let g = NotchGeometry.make(notch: Notch(width: 220, height: 38), builtInNotchWidth: 220, menuBarHeight: 38).floating(topMargin: topMargin)
+        let panel = g.panelSize
+        for (island, e) in [(g.collapsedRect, 0.0), (g.islandRect(size: g.expandedSize), 1.0)] {
+            let p = try Self.render(Self.peak(island, .of(g, expansion: e), expansion: e, panel: panel, topRoom: island.minY), size: panel)
+            #expect(p.edgeAlpha(top: true) <= 1, "top margin \(topMargin), expansion \(e): edge alpha \(p.edgeAlpha(top: true))")
+            #expect(p.alpha(Int(island.midX), Int(island.maxY) + 10) > 20, "the light under the island still shows")
+        }
+        let unfaded = try Self.render(Self.peak(g.collapsedRect, .of(g, expansion: 0), expansion: 0, panel: panel), size: panel)
+        if topMargin < 30 { #expect(unfaded.edgeAlpha(top: true) > 2, "without the fade the top edge would cut the light") }
+    }
+
+    @MainActor @Test func aDynamicIslandPanelFadesTheLightUnderTheMenuBar() throws {
+        let g = NotchGeometry.make(notch: nil, builtInNotchWidth: 0, menuBarHeight: 37, dynamicIsland: true, touch: true)
+        #expect(g.islandTop < NotchGlow.blurReach, "the panel's top is the menu bar's bottom, 6 pt above the pill")
+        let p = try Self.render(Self.peak(g.collapsedRect, .of(g, expansion: 0), expansion: 0, panel: g.panelSize, topRoom: g.collapsedRect.minY), size: g.panelSize)
+        #expect(p.edgeAlpha(top: true) <= 1, "edge alpha \(p.edgeAlpha(top: true))")
+        #expect(p.alpha(Int(g.collapsedRect.midX), Int(g.collapsedRect.maxY) + 10) > 10)
     }
 
     private static let island = CGSize(width: 300, height: 120)
